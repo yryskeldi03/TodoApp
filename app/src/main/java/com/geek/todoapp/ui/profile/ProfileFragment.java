@@ -27,13 +27,6 @@ import org.jetbrains.annotations.NotNull;
 public class ProfileFragment extends Fragment {
     private FragmentProfileBinding binding;
     public static final int PICK_IMAGE = 1;
-    private Intent intent;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,7 +38,7 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.btnOpenGallery.setOnClickListener(v -> {
-            intent = new Intent ();
+            Intent intent = new Intent ();
             intent.setAction ( Intent.ACTION_PICK );
             intent.setDataAndType ( MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*" );
             startActivityForResult ( intent, PICK_IMAGE );
