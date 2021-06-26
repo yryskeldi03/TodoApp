@@ -28,8 +28,13 @@
         android:label="Новая задача"
         tools:layout="@layout/fragment_form" />
     <fragment
-        android:id="@+id/navigation_profile"
+        android:id="@+id/profileFragment2"
         android:name="com.geek.todoapp.ui.profile.ProfileFragment"
-        android:label="Profile"
+        android:label="@string/title_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/boardFragment"
+        android:name="com.geek.todoapp.ui.onboard.BoardFragment"
+        android:label="fragment_board"
+        tools:layout="@layout/fragment_board" />
 </navigation>
