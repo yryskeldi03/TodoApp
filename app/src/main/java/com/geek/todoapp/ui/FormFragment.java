@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.geek.todoapp.R;
 import com.geek.todoapp.databinding.FragmentFormBinding;
+import com.geek.todoapp.models.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
@@ -22,19 +23,16 @@ public class FormFragment extends Fragment {
     private FragmentFormBinding binding;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentFormBinding.inflate(inflater,container,false);
+        binding = FragmentFormBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Task task = (Task) requireArguments().getSerializable("task");
+        if (task != null) binding.editText.setText(task.getTitle());
         binding.btnSave.setOnClickListener(v -> {
             save();
         });

@@ -42,8 +42,7 @@ public class MainActivity extends AppCompatActivity {
         navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
-
-        navController.navigate(R.id.boardFragment);
+        if (!Prefs.getInstance().isBoardShown()) navController.navigate(R.id.boardFragment);
 
         fragments.add(R.id.navigation_home);
         fragments.add(R.id.navigation_dashboard);

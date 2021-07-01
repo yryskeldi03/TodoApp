@@ -22,6 +22,7 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
     private String[] titles = new String[]{"SIMPLE ABROAD CALLS", "FREE WONEP TO WONEP", "NO HIDDEN CHARGES OR FEES"};
     private String[] descriptions = new String[]{"Wonep converts international calls to local calls without WiFi or data", "If the person you're calling also has Wonep the call will be entirely free", "We have a very small charge for non-Wonep calls to mobiles or landlines"};
     private int[] imageViews = new int[]{R.drawable.onboard_page1, R.drawable.onboard_page2, R.drawable.onboard_page3};
+    private OnNextClick onNextClick;
 
     @Override
     public BoardAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -31,11 +32,16 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(BoardAdapter.ViewHolder holder, int position) {
         holder.bind(position);
+
     }
 
     @Override
     public int getItemCount() {
         return titles.length;
+    }
+
+    public void setOnNextClick(OnNextClick onNextClick) {
+        this.onNextClick = onNextClick;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -50,6 +56,13 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
             binding.textTitle.setText(titles[position]);
             binding.textDescription.setText(descriptions[position]);
             binding.imageView.setImageResource(imageViews[position]);
+            binding.btnNext.setOnClickListener(v -> onNextClick.onBtnNextClickListener());
+            if (position == 2) binding.btnNext.setVisibility(View.VISIBLE);
+            else binding.btnNext.setVisibility(View.INVISIBLE);
         }
+    }
+
+    public interface OnNextClick {
+        void onBtnNextClickListener();
     }
 }

@@ -1,26 +1,36 @@
 package com.geek.todoapp.ui.profile;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import com.geek.todoapp.R;
+import com.bumptech.glide.Glide;
+import com.geek.todoapp.Prefs;
 import com.geek.todoapp.databinding.FragmentProfileBinding;
 
 public class ProfileFragment extends Fragment {
     private FragmentProfileBinding binding;
     public static final int PICK_IMAGE = 1;
+    private Prefs prefs;
+    private Uri selected_Image_Uri;
+
+    @Override
+    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        prefs = new Prefs(requireContext());
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -31,12 +41,18 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         binding.btnOpenGallery.setOnClickListener(v -> {
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_PICK);
             intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
             startActivityForResult(intent, PICK_IMAGE);
+        });
+
+        binding.btnDeleteImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                prefs.deleteImg();
+            }
         });
     }
 
@@ -44,8 +60,20 @@ public class ProfileFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @org.jetbrains.annotations.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
-            Uri selected_Image_Uri = data.getData();
+            selected_Image_Uri = data.getData();
+            prefs.putImage(String.valueOf(selected_Image_Uri));
             binding.containerForImage.setImageURI(selected_Image_Uri);
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        //set image uri form prefs
+        if (prefs.getImage() != null) {
+            selected_Image_Uri = Uri.parse(prefs.getImage());
+        }
+        //set image in view
+        Glide.with(requireContext()).load(selected_Image_Uri).circleCrop().into(binding.containerForImage);
     }
 }

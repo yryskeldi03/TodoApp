@@ -38,14 +38,4 @@
         app:tabMaxWidth="10dp"
         app:tabRippleColor="@null" />
 
-    <Button
-        android:id="@+id/btn_next"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/dark_blue"
-        android:text="Next"
-        android:textAllCaps="false"
-        app:layout_constraintBottom_toBottomOf="@id/dots"
-        app:layout_constraintStart_toStartOf="@id/btn_skip"
-        app:layout_constraintEnd_toEndOf="@id/btn_skip" />
 </androidx.constraintlayout.widget.ConstraintLayout>

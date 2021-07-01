@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.geek.todoapp.Prefs;
 import com.geek.todoapp.R;
 import com.geek.todoapp.databinding.FragmentBoardBinding;
 import com.google.android.material.tabs.TabLayout;
@@ -27,12 +28,6 @@ public class BoardFragment extends Fragment {
     private BoardAdapter adapter;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentBoardBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -43,35 +38,19 @@ public class BoardFragment extends Fragment {
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         adapter = new BoardAdapter();
+        adapter.setOnNextClick(() -> close());
+
         binding.viewPager.setAdapter(adapter);
-        TabLayoutMediator tabLayoutMediator =
-                new TabLayoutMediator(binding.dots, binding.viewPager, true, new TabLayoutMediator.TabConfigurationStrategy() {
-                    @Override
-                    public void onConfigureTab(TabLayout.Tab tab, int position) {
+        new TabLayoutMediator(binding.dots, binding.viewPager, true, (tab, position) -> { }).attach();
 
-                    }
-                });
-        tabLayoutMediator.attach();
-
-        binding.btnNext.setOnClickListener(v -> skipToHome());
-
-        binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                super.onPageSelected(position);
-                if (position == 2) {
-                    binding.btnNext.setVisibility(View.VISIBLE);
-                } else
-                    binding.btnNext.setVisibility(View.GONE);
-            }
-        });
-
-        binding.btnSkip.setOnClickListener(v -> skipToHome());
+        binding.btnSkip.setOnClickListener(v -> close());
 
     }
 
-    private void skipToHome() {
+    private void close() {
+        Prefs prefs = new Prefs(requireContext());
+        prefs.saveBoardState();
         NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
-        navController.navigate(R.id.navigation_home);
+        navController.navigateUp();
     }
 }
