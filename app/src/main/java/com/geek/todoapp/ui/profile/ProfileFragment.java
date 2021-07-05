@@ -48,12 +48,8 @@ public class ProfileFragment extends Fragment {
             startActivityForResult(intent, PICK_IMAGE);
         });
 
-        binding.btnDeleteImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                prefs.deleteImg();
-            }
-        });
+        //Delete image
+        binding.btnDeleteImg.setOnClickListener(v -> prefs.deleteImg());
     }
 
     @Override

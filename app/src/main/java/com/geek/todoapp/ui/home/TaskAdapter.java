@@ -1,5 +1,6 @@
 package com.geek.todoapp.ui.home;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,11 @@ import com.geek.todoapp.models.Task;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     private ArrayList<Task> list = new ArrayList<>();
@@ -32,6 +37,11 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     public void removeItem(int position) {
         list.remove(position);
         notifyItemRemoved(position);
+    }
+
+    public void addItems(List<Task> list) {
+        this.list.addAll(list);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -73,7 +83,9 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         }
 
         public void onBind(Task task) {
+            String time = (String) android.text.format.DateFormat.format("HH:mm dd MMMM yyyy 'г'", new Date(task.getCreatedAt()));
             binding.textTitle.setText(task.getTitle());
+            binding.tvDate.setText(time);
         }
     }
 

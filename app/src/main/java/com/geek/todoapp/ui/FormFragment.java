@@ -12,12 +12,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.geek.todoapp.App;
 import com.geek.todoapp.R;
 import com.geek.todoapp.databinding.FragmentFormBinding;
 import com.geek.todoapp.models.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class FormFragment extends Fragment {
     private FragmentFormBinding binding;
@@ -42,8 +46,12 @@ public class FormFragment extends Fragment {
     private void save() {
         String text = binding.editText.getText().toString();
         Bundle bundle = new Bundle();
-        bundle.putString("text", text);
+        Task task =  new Task(text);
+        task.setCreatedAt(System.currentTimeMillis());
+        bundle.putSerializable("text", task);
         getParentFragmentManager().setFragmentResult("form", bundle);
+
+        App.getAppDataBase().taskDao().insert(task);
         close();
     }
 

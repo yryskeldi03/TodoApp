@@ -1,7 +1,10 @@
 package com.geek.todoapp;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -63,6 +66,21 @@ public class MainActivity extends AppCompatActivity {
                     getSupportActionBar().show();
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.sort) {
+            Toast.makeText(this, "Click", Toast.LENGTH_SHORT).show();
+            App.getAppDataBase().taskDao().getAllSorted();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
