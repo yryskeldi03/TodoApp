@@ -38,4 +38,12 @@ public class Prefs {
     public void deleteImg(){
         preferences.edit().remove("imageSet").apply();
     }
+
+    public void putUserData(String userData){
+        preferences.edit().putString("userData", userData).apply();
+    }
+
+    public String getUserData(){
+        return preferences.getString("userData", null);
+    }
 }

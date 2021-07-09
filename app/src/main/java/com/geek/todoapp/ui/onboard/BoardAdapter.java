@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> {
     private String[] titles = new String[]{"SIMPLE ABROAD CALLS", "FREE WONEP TO WONEP", "NO HIDDEN CHARGES OR FEES"};
     private String[] descriptions = new String[]{"Wonep converts international calls to local calls without WiFi or data", "If the person you're calling also has Wonep the call will be entirely free", "We have a very small charge for non-Wonep calls to mobiles or landlines"};
-    private int[] imageViews = new int[]{R.drawable.onboard_page1, R.drawable.onboard_page2, R.drawable.onboard_page3};
+    private int[] imageViews = new int[]{R.raw.anim, R.raw.anim, R.raw.anim};
     private OnNextClick onNextClick;
 
     @Override
@@ -55,7 +55,7 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
         public void bind(int position) {
             binding.textTitle.setText(titles[position]);
             binding.textDescription.setText(descriptions[position]);
-            binding.imageView.setImageResource(imageViews[position]);
+            binding.imageView.setAnimation(imageViews[position]);
             binding.btnNext.setOnClickListener(v -> onNextClick.onBtnNextClickListener());
             if (position == 2) binding.btnNext.setVisibility(View.VISIBLE);
             else binding.btnNext.setVisibility(View.INVISIBLE);

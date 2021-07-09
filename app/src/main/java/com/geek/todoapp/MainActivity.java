@@ -6,6 +6,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.geek.todoapp.ui.home.HomeFragment;
+import com.geek.todoapp.ui.home.TaskAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
@@ -28,11 +30,13 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private NavController navController;
     private ArrayList<Integer> fragments = new ArrayList<>();
+    private TaskAdapter adapter = new TaskAdapter();
+    private HomeFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        fragment = new HomeFragment();
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -76,11 +80,18 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.sort) {
-            Toast.makeText(this, "Click", Toast.LENGTH_SHORT).show();
-            App.getAppDataBase().taskDao().getAllSorted();
+//        if (item.getItemId() == R.id.sort) {
+//            Toast.makeText(this, "Click", Toast.LENGTH_SHORT).show();
+//            adapter.addItems(App.getAppDataBase().taskDao().getAllSorted());
+//        }
+//        return super.onOptionsItemSelected(item);
+        switch (item.getItemId()){
+
+            default:
+                if (fragment !=  null)
+                    fragment.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     @Override

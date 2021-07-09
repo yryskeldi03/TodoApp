@@ -3,6 +3,7 @@ package com.geek.todoapp.ui.home;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,16 +35,21 @@ public class HomeFragment extends Fragment {
     private Task task;
     private int position;
     private boolean isChanged = false;
-    private ArrayList<Task> list = new ArrayList<>();
-    private boolean sorted = false;
+    private List<Task> list = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new TaskAdapter();
-        list = (ArrayList<Task>) App.getAppDataBase().taskDao().getAll();
-        adapter.addItems(list);
+        list = App.getAppDataBase().taskDao().getAll();
+        initAdapter(list);
     }
+
+    private void initAdapter(List<Task> list) {
+        adapter = new TaskAdapter();
+        this.list = (list);
+        adapter.addItems(this.list);
+    }
+
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
@@ -102,23 +108,20 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void loadDataSorted() {
-        App.getAppDataBase().taskDao().getAllSorted().observe(this, new Observer<List<Task>>() {
-            @Override
-            public void onChanged(List<Task> tasks) {
-                list.clear();
-                list.addAll(tasks);
-                adapter.notifyDataSetChanged();
-            }
-        });
-    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull @NotNull MenuItem item) {
-        if (item.getItemId() == R.id.sort) {
-            loadDataSorted();
+        switch (item.getItemId()) {
+            case R.id.sort:
+            initAdapterSort();
+                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void initAdapterSort() {
+        adapter = new TaskAdapter();
+        adapter.updateItems(App.getAppDataBase().taskDao().getAllSorted());
     }
 
 
@@ -127,5 +130,11 @@ public class HomeFragment extends Fragment {
         Bundle bundle = new Bundle();
         bundle.putSerializable("task", task);
         navController.navigate(R.id.formFragment, bundle);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e("TAG", "onDestroy: ");
     }
 }

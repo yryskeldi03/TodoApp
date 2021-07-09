@@ -37,4 +37,9 @@
         android:name="com.geek.todoapp.ui.onboard.BoardFragment"
         android:label="fragment_board"
         tools:layout="@layout/fragment_board" />
+    <fragment
+        android:id="@+id/imageFragment"
+        android:name="com.geek.todoapp.ImageFragment"
+        android:label="fragment_image"
+        tools:layout="@layout/fragment_image" />
 </navigation>

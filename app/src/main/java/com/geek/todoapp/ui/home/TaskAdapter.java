@@ -44,6 +44,13 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
+    public void updateItems(List<Task> list) {
+        this.list.clear();
+        this.list = (ArrayList<Task>) list;
+        notifyDataSetChanged();
+    }
+
+
     @Override
     public TaskAdapter.ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         return new ViewHolder(ItemsBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));

@@ -3,6 +3,7 @@
     package="com.geek.todoapp">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <application
         android:name=".App"
         android:allowBackup="true"
