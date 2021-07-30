@@ -19,12 +19,12 @@
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.geek.todoapp.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:name="com.geek.todoapp.ui.feed.FeedFragment"
+        android:label="@string/title_feed"
+        tools:layout="@layout/fragment_feed" />
     <fragment
         android:id="@+id/formFragment"
-        android:name="com.geek.todoapp.ui.FormFragment"
+        android:name="com.geek.todoapp.forms.FormFragment"
         android:label="Новая задача"
         tools:layout="@layout/fragment_form" />
     <fragment
@@ -42,4 +42,20 @@
         android:name="com.geek.todoapp.ImageFragment"
         android:label="fragment_image"
         tools:layout="@layout/fragment_image" />
+
+    <fragment
+        android:id="@+id/authFragment"
+        android:name="com.geek.todoapp.ui.auth.AuthFragment"
+        android:label="fragment_auth"
+        tools:layout="@layout/fragment_auth" />
+    <fragment
+        android:id="@+id/formFragmentFeed"
+        android:name="com.geek.todoapp.forms.FormFragmentFeed"
+        android:label="fragment_form_feed"
+        tools:layout="@layout/fragment_form_feed" />
+    <fragment
+        android:id="@+id/fullPostFragment"
+        android:name="com.geek.todoapp.FullPostFragment"
+        android:label="fragment_full_post"
+        tools:layout="@layout/fragment_full_post" />
 </navigation>

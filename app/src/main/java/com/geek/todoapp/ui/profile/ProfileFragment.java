@@ -27,9 +27,22 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.geek.todoapp.Prefs;
 import com.geek.todoapp.R;
+import com.geek.todoapp.databinding.FragmentAuthBinding;
 import com.geek.todoapp.databinding.FragmentProfileBinding;
+import com.geek.todoapp.models.ProfileModel;
 import com.geek.todoapp.models.Task;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,18 +51,14 @@ import java.util.List;
 public class ProfileFragment extends Fragment {
     private FragmentProfileBinding binding;
     public static final int PICK_IMAGE = 1;
-    private Prefs prefs;
+    public Prefs prefs;
     private Uri selected_Image_Uri;
-    private boolean isClickImage= false;
-
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         prefs = new Prefs(requireContext());
-
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -60,18 +69,27 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (prefs.getImage() == null)
+            binding.containerForImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_account_circle_24));
         binding.btnOpenGallery.setOnClickListener(v -> {
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_PICK);
-            intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+            intent.setType("image/*");
             startActivityForResult(intent, PICK_IMAGE);
+        });
+
+        binding.containerForImage.setOnLongClickListener(v -> {
+            prefs.deleteImg();
+            binding.containerForImage.setImageBitmap(null);
+            Toast.makeText(requireContext(), "You deleted photo", Toast.LENGTH_SHORT).show();
+            return true;
         });
 
         binding.etPhone.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_CALL);
-                intent.setData(Uri.parse(binding.etPhone.getText().toString()));
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + 0 + binding.etPhone.getText().toString()));
                 startActivity(intent);
                 return true;
             }
@@ -81,12 +99,7 @@ public class ProfileFragment extends Fragment {
             openFragment();
         });
 
-        //Delete image
-        binding.containerForImage.setOnLongClickListener(v -> {
-            prefs.deleteImg();
-            binding.containerForImage.setImageBitmap(null);
-            return true;
-        });
+        loadData();
     }
 
     @Override
@@ -106,11 +119,34 @@ public class ProfileFragment extends Fragment {
         if (prefs.getImage() != null) {
             selected_Image_Uri = Uri.parse(prefs.getImage());
         }
-        if (prefs.getUserData() != null){
+        if (prefs.getUserData() != null) {
             setDataFromPrefs(prefs.getUserData());
         }
         //set image in view
         Glide.with(requireContext()).load(selected_Image_Uri).circleCrop().into(binding.containerForImage);
+
+        //
+    }
+
+    private void loadData() {
+        String userId = FirebaseAuth.getInstance().getUid();
+        FirebaseFirestore.getInstance()
+                .collection("profileData")
+                .document(userId)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        ProfileModel model = documentSnapshot.toObject(ProfileModel.class);
+                        if (model != null) {
+                            binding.etUsername.setText(model.getUserName());
+                            binding.etEmail.setText(model.getEmail());
+                            binding.etPhone.setText(model.getNumber());
+                            binding.etDateOfBirth.setText(model.getDate());
+                            binding.etAddress.setText(model.getAddress());
+                        }
+                    }
+                });
     }
 
     private void setDataFromPrefs(String userData) {
@@ -125,26 +161,47 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        String userData = checkEditText(binding.etUsername.getText().toString())+ ",";
+        String userData = checkEditText(binding.etUsername.getText().toString()) + ",";
         userData += checkEditText(binding.etEmail.getText().toString()) + ",";
-        userData += checkEditText(binding.etPhone.getText().toString())+ ",";
-        userData += checkEditText(binding.etDateOfBirth.getText().toString())+ ",";
-        userData += checkEditText(binding.etAddress.getText().toString())+ ",";
+        userData += checkEditText(binding.etPhone.getText().toString()) + ",";
+        userData += checkEditText(binding.etDateOfBirth.getText().toString()) + ",";
+        userData += checkEditText(binding.etAddress.getText().toString()) + ",";
         prefs.putUserData(userData);
     }
 
     private String checkEditText(String etUsername) {
-        if (!etUsername.equals("")){
+        if (!etUsername.equals("")) {
             return etUsername;
-        }else
+        } else
             return " ";
     }
+
+    private void saveToFirestore() {
+        String userId = FirebaseAuth.getInstance().getUid();
+        ProfileModel model = new ProfileModel(binding.etUsername.getText().toString(),
+                binding.etEmail.getText().toString(),
+                binding.etPhone.getText().toString(),
+                binding.etDateOfBirth.getText().toString(),
+                binding.etAddress.getText().toString());
+        FirebaseFirestore.getInstance()
+                .collection("profileData")
+                .document(userId)
+                .set(model);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        saveToFirestore();
+    }
+
     private void openFragment() {
         NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
-        Bundle bundle = new Bundle();
-        bundle.putString("image", selected_Image_Uri.toString());
-
-   //     getParentFragmentManager().setFragmentResult("prof", bundle);
-        navController.navigate(R.id.imageFragment, bundle);
+        if (prefs.getImage() != null) {
+            Bundle bundle = new Bundle();
+            bundle.putString("image", selected_Image_Uri.toString());
+            navController.navigate(R.id.imageFragment, bundle);
+        } else
+            Toast.makeText(requireContext(), "Enter your photo", Toast.LENGTH_SHORT).show();
     }
 }

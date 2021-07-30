@@ -1,4 +1,4 @@
-package com.geek.todoapp.ui.notifications;
+package com.geek.todoapp.ui.feed;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

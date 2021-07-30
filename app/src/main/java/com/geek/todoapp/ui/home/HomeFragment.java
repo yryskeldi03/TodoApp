@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +15,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentResultListener;
-import androidx.lifecycle.Observer;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -34,12 +34,13 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private Task task;
     private int position;
-    private boolean isChanged = false;
     private List<Task> list = new ArrayList<>();
+    private int currentPos;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         list = App.getAppDataBase().taskDao().getAll();
         initAdapter(list);
     }
@@ -48,8 +49,8 @@ public class HomeFragment extends Fragment {
         adapter = new TaskAdapter();
         this.list = (list);
         adapter.addItems(this.list);
+        adapter.notifyDataSetChanged();
     }
-
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
@@ -62,7 +63,7 @@ public class HomeFragment extends Fragment {
 
         FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
-            isChanged = false;
+            currentPos = -1;
             openFragment(null);
         });
         setFragmentListener();
@@ -75,11 +76,10 @@ public class HomeFragment extends Fragment {
         adapter.setOnItemClickListener(new TaskAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                isChanged = true;
+                currentPos = position;
                 HomeFragment.this.position = position;
                 Task task = adapter.getItem(position);
                 openFragment(task);
-                Toast.makeText(requireContext(), "Text:" + task.getTitle() + " Position:" + (position + 1), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -103,38 +103,35 @@ public class HomeFragment extends Fragment {
     private void setFragmentListener() {
         getParentFragmentManager().setFragmentResultListener("form", getViewLifecycleOwner(), (requestKey, result) -> {
             task = (Task) result.getSerializable("text");
-            if (isChanged) adapter.changeItems(task, position);
-            else adapter.addItem(task);
+            if (currentPos == -1) adapter.addItem(task);
+            else adapter.updateItem(task, position);
         });
     }
 
+    @Override
+    public void onCreateOptionsMenu(@NonNull @NotNull Menu menu, @NonNull @NotNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.toolbar_menu, menu);
+    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull @NotNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.sort:
-            initAdapterSort();
+                initAdapterSort();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void initAdapterSort() {
-        adapter = new TaskAdapter();
         adapter.updateItems(App.getAppDataBase().taskDao().getAllSorted());
     }
-
 
     private void openFragment(Task task) {
         NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
         Bundle bundle = new Bundle();
         bundle.putSerializable("task", task);
         navController.navigate(R.id.formFragment, bundle);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.e("TAG", "onDestroy: ");
     }
 }

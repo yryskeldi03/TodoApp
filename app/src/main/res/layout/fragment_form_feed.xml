@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:gravity="center"
+    tools:context=".forms.FormFragmentFeed">
+
+    <EditText
+        android:id="@+id/et_title"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:hint="Введите заголовок"
+        android:padding="8dp"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/et_text"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:hint="Введите текст"
+        android:padding="8dp"
+        android:textSize="20sp"
+        android:layout_marginTop="8dp"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_save"
+        android:layout_marginTop="8dp"
+        android:text="Сохранить"
+        />
+
+</LinearLayout>

@@ -7,6 +7,17 @@
     android:background="@color/black"
     tools:context=".ImageFragment">
 
+    <TextView
+        android:id="@+id/tv_for_"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/for_img_from_profile"/>
+
     <ImageView
         android:id="@+id/for_img_from_profile"
         android:layout_width="match_parent"

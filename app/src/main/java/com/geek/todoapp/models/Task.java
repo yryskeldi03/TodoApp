@@ -15,6 +15,10 @@ public class Task implements Serializable {
     private long id;
     private String title;
     private long createdAt;
+    private String docId;
+
+    public Task() {
+    }
 
     public Task(String title) {
         this.title = title;
@@ -44,7 +48,15 @@ public class Task implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public String convert(long currentTime){
+    public String getDocId() {
+        return docId;
+    }
+
+    public void setDocId(String docId) {
+        this.docId = docId;
+    }
+
+    public String convert(long currentTime) {
         DateFormat date = new SimpleDateFormat("HH:mm dd MMMM yyyy 'г'");
         return date.format(System.currentTimeMillis());
     }

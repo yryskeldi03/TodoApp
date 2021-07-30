@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.geek.todoapp.App;
 import com.geek.todoapp.databinding.ItemsBinding;
 import com.geek.todoapp.models.Task;
 
@@ -24,30 +25,29 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     private OnItemClickListener onItemClickListener;
 
     public void addItem(Task task) {
-        this.list.add(0, task);
+        this.list.add(task);
         notifyDataSetChanged();
     }
 
-    public void changeItems(Task task, int pos) {
-        list.remove(pos);
-        list.add(pos, task);
+    public void updateItem(Task task, int pos) {
+        list.set(pos, task);
         notifyItemChanged(pos);
     }
 
     public void removeItem(int position) {
         list.remove(position);
-        notifyItemRemoved(position);
+        notifyDataSetChanged();
     }
 
     public void addItems(List<Task> list) {
+        this.list.clear();
         this.list.addAll(list);
         notifyDataSetChanged();
     }
 
     public void updateItems(List<Task> list) {
         this.list.clear();
-        this.list = (ArrayList<Task>) list;
-        notifyDataSetChanged();
+        addItems(list);
     }
 
 
