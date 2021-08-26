@@ -76,6 +76,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+
         this.onItemClickListener = onItemClickListener;
     }
 

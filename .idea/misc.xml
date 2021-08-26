@@ -3,8 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/User/AndroidStudioProjects/TodoApp/app/src/main/res/drawable/ic_add.xml" value="0.2361111111111111" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/TodoApp/app/src/main/res/drawable/ic_baseline_camera_alt_24.xml" value="0.2361111111111111" />
         <entry key="..\:/Users/User/AndroidStudioProjects/TodoApp/app/src/main/res/drawable/news_item_bckground.xml" value="0.23796296296296296" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/TodoApp/app/src/main/res/layout/activity_main.xml" value="0.1334853090172239" />
         <entry key="..\:/Users/User/AndroidStudioProjects/TodoApp/app/src/main/res/layout/item_news.xml" value="0.264" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/TodoApp/app/src/main/res/layout/items.xml" value="0.1334853090172239" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/TodoApp/app/src/main/res/layout/pager_board.xml" value="0.1334853090172239" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/TodoApp/app/src/main/res/menu/bottom_nav_menu.xml" value="0.1935185185185185" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/TodoApp/app/src/main/res/menu/toolbar_menu.xml" value="0.20185185185185187" />
       </map>
     </option>
   </component>

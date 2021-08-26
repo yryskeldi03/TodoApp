@@ -1,24 +1,21 @@
 package com.geek.todoapp.ui.onboard;
 
+import android.app.Fragment;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.viewpager2.widget.ViewPager2;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
 import com.geek.todoapp.Prefs;
 import com.geek.todoapp.R;
 import com.geek.todoapp.databinding.FragmentBoardBinding;
-import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import org.jetbrains.annotations.NotNull;
@@ -48,9 +45,9 @@ public class BoardFragment extends Fragment {
     }
 
     private void close() {
-        Prefs prefs = new Prefs(requireContext());
+        Prefs prefs = new Prefs(getActivity());
         prefs.saveBoardState();
-        NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
+        NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main);
         navController.navigateUp();
     }
 }
